@@ -31,3 +31,7 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE # 파라미터 바인딩 값까지 확인
     # HikariCP 관련 로깅
     com.zaxxer.hikari: DEBUG
+
+jwt:
+  secret-key: your_super_secret_key_that_is_at_least_256_bits_long_and_very_secure_do_not_share
+  expiration-time: 3600000000

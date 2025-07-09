@@ -5,7 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value; // @Value 어노테이션 추가
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -19,11 +19,10 @@ public class TokenService {
     @Value("${jwt.expiration-time}")
     private long expirationTime;
 
-    private final SecretKey secretKey;
+    private SecretKey secretKey; // final 키워드 제거 (생성자에서 초기화하지 않으므로)
 
+    // 기본 생성자는 비워둡니다. Spring이 빈을 생성할 때 호출됩니다.
     public TokenService() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKeyString);
-        this.secretKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
     /**
@@ -32,14 +31,17 @@ public class TokenService {
      * @return 생성된 JWT 토큰 문자열
      */
     public String generateToken(User user) {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKeyString);
+        this.secretKey = Keys.hmacShaKeyFor(keyBytes);
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expirationTime);
 
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("alg", "HS256")
-                .claim("id", user.getId())
-                .claim("email", user.getEmail())
+                .setSubject(user.getEmail()) // 토큰의 주체(subject)로 이메일 사용 (validateTokenAndGetEmail과 일관성 유지)
+                .claim("id", user.getId()) // 사용자 ID를 'id'라는 커스텀 클레임으로 추가
+                .claim("email", user.getEmail()) // 이메일을 'email'이라는 커스텀 클레임으로 추가
                 .setIssuedAt(now) // 발행 시간
                 .setExpiration(expiryDate) // 만료 시간
                 .signWith(secretKey, SignatureAlgorithm.HS256) // 서명
@@ -59,7 +61,7 @@ public class TokenService {
                     .build()
                     .parseClaimsJws(token)
                     .getBody()
-                    .getSubject();
+                    .getSubject(); // subject 클레임에서 이메일 추출
         } catch (Exception e) {
             System.err.println("Invalid JWT Token: " + e.getMessage());
             return null;
