@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-backend
+  template:
+    metadata:
+      labels:
+        app: java-backend
+    spec:
+      containers:
+      - name: backend
+        image: 837126493345.dkr.ecr.ap-northeast-2.amazonaws.com/team1/backend:latest
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+          readOnly: true
+      volumes:
+      - name: config-volume
+        configMap:
+          name: java-backend-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-backend
+spec:
+  selector:
+    app: java-backend
+  ports:
+  - port: 80
+    targetPort: 8080

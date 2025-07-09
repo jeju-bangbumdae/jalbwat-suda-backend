@@ -1,0 +1,15 @@
+resources:
+  - frontend.yaml
+  - backend.yaml
+  - ingress.yaml
+
+configMapGenerator:
+  - name: react-frontend-config #fix me
+    files:
+      - config.json=config/frontend-config.json
+  - name: java-backend-config #fix me
+    files:
+      - config.json=config/backend-config.json
+
+generatorOptions:
+  disableNameSuffixHash: true
