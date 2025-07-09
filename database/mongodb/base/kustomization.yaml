@@ -1,5 +1,0 @@
-resources:
-  - create_collction/job.yaml
-  - statefulset.yaml
-  - service.yaml
-  - secret.yaml
