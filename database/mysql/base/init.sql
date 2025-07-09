@@ -8,5 +8,5 @@ CREATE TABLE IF NOT EXISTS user (
     email VARCHAR(100)
 );
 
-GRANT ALL PRIVILEGES ON jalbwat-suda.* TO 'myuser'@'%' IDENTIFIED BY 'mypassword';
+GRANT ALL PRIVILEGES ON jalbwat-suda.* TO 'myuser'@'%' IDENTIFIED BY 'mypass123';
 FLUSH PRIVILEGES;
