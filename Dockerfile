@@ -22,13 +22,8 @@ RUN ./gradlew bootJar -x test
 # 애플리케이션 실행에 필요한 JRE만 포함된 이미지를 사용합니다.
 FROM eclipse-temurin:17-jre-alpine
 
-# 최종 애플리케이션의 작업 디렉토리 설정
 WORKDIR /app
-
-# 1단계(builder)에서 생성된 실행 가능한 JAR 파일을 복사합니다.
-# Gradle은 일반적으로 JAR 파일을 build/libs 폴더에 생성합니다.
-# 여기서는 와일드카드를 사용하여 build/libs 내의 모든 .jar 파일을 복사하고 'app.jar'로 이름을 변경합니다.
-COPY --from=builder /app/build/libs/template.jar ./app.jar
+COPY --from=builder /app/build/libs/*.jar app.jar
 
 # Spring Boot 애플리케이션이 사용할 포트 (기본 8080)
 EXPOSE 8080
