@@ -5,12 +5,6 @@ spring:
       jdbc-url: jdbc:mysql://mysql-0.mysql.goormthon-3.svc.cluster.local:3306/jalbwat-suda?useSSL=false&allowPublicKeyRetrieval=true # MySQL DB 호스트, 포트, DB 이름 및 추가 옵션
       username: myuser # MySQL 사용자 이름
       password: mypass123 # MySQL 비밀번호
-      pool-name: DefaultHikariCP # HikariCP 풀 이름
-      maximum-pool-size: 10 # 최대 풀 사이즈
-      minimum-idle: 5 # 최소 유휴 연결 수
-      idle-timeout: 600000 # 유휴 연결 타임아웃 (10분)
-      connection-timeout: 30000 # 연결 타임아웃 (30초)
-      max-lifetime: 1800000 # 최대 연결 수명 (30분)
 
   jpa:
     hibernate:
