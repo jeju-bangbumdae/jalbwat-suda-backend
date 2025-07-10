@@ -10,14 +10,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Store {
+public class Store extends BaseEntity {
     @NotNull
     @Column(name = "email", unique = true)
     private String email;
-
-    @NotNull
-    @Column(name = "email", unique = true)
-    private One email;
 
     @NotNull
     @Column(name = "user_password")
