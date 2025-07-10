@@ -4,17 +4,17 @@ import com.backend.template.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @AllArgsConstructor
-public class StoreResponseDto {
+public class GuestBookResponseDto {
     private long id;
+    private long storeId;
     private String name;
     private String address;
     private String category;
-    private UserResponseDto user;
-    private String lat;
-    private String operationTime;
-    private String lon;
-    private String phone;
-    private int guestBookCount;
+    private List<QuestionResponseDto> questions;
+    private String content;
+    private User user;
 }
