@@ -99,7 +99,7 @@ public class GuestBookController {
         return ResponseEntity.ok(body);
     }
 
-    @GetMapping("/by-user/{userId}")
+    @GetMapping("/by-user")
     @Operation(summary = "사용자 ID로 방명록 목록 조회", description = "특정 사용자가 작성한 방명록 목록을 최신순으로 조회합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "방명록 목록 조회 성공",
@@ -110,9 +110,15 @@ public class GuestBookController {
             @ApiResponse(responseCode = "500", description = "서버 오류",
                     content = @Content(mediaType = "application/json"))
     })
-    public ResponseEntity<List<GuestBookResponseDto>> getGuestBooksByUserId(
-            @PathVariable @Parameter(description = "조회할 사용자의 ID", example = "1") Integer userId) {
-        List<GuestBook> guestBooks = this.guestBookService.getGuestBooksByUserId(userId);
+    public ResponseEntity<List<GuestBookResponseDto>> getGuestBooksByUser(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String header) {
+        if (header == null || !header.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body(null);
+        }
+        String token = header.substring(7);
+        Long userId = this.tokenService.validateTokenAndGetUserId(token);
+        List<GuestBook> guestBooks = this.guestBookService.getGuestBooksByUserId(Math.toIntExact(userId));
+
         List<GuestBookResponseDto> body = new ArrayList<>();
         for (GuestBook guestBook : guestBooks) {
             body.add(this.mapToDto(guestBook));
