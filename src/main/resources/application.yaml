@@ -28,5 +28,5 @@ logging:
     com.zaxxer.hikari: DEBUG
 
 jwt:
-  secret-key: your_super_secret_key_that_is_at_least_256_bits_long_and_very_secure_do_not_share
+  secret-key: yoursupersecret
   expiration-time: 3600000000
