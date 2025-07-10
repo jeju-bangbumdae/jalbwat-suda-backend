@@ -1,7 +1,6 @@
 package com.backend.template.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,16 +11,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GuestBook extends BaseEntity {
     @NotNull
-    @Column(name = "email", unique = true)
-    private String email;
+    private String content;
 
-    @NotNull
-    @Column(name = "password")
-    private String password;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_id")
+    private Question question;
 
-    @NotNull
-    private String actor;
+    private String answer;
 
-    @NotNull
-    private String name;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private Store store;
 }

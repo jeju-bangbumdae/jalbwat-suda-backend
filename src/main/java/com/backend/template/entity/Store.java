@@ -18,6 +18,9 @@ public class Store extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String name;
 
+    @Column(nullable = false, length = 100)
+    private String businessNum;
+
     @Column(nullable = false, columnDefinition = "POINT")
     private Point location;
 

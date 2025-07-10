@@ -1,6 +1,5 @@
 package com.backend.template.dto;
 
-import com.backend.template.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -14,7 +13,7 @@ public class GuestBookResponseDto {
     private String name;
     private String address;
     private String category;
-    private List<QuestionResponseDto> questions;
+    private QnaResponseDto qna;
     private String content;
     private UserResponseDto user;
 }

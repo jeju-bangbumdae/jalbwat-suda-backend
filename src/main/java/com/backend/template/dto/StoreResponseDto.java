@@ -1,6 +1,5 @@
 package com.backend.template.dto;
 
-import com.backend.template.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
