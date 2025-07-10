@@ -31,6 +31,7 @@ public class WebConfig {
         configuration.addAllowedOrigin("http://localhost:8080");
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("https://backend-team3.goorm.training");
+        configuration.addAllowedOrigin("https://jalbwat-suda.goorm.training");
         configuration.setAllowCredentials(true);
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
