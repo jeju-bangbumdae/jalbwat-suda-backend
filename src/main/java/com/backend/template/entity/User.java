@@ -17,6 +17,9 @@ public class User extends BaseEntity {
     private String password;
 
     @NotNull
+    private String actor;
+
+    @NotNull
     @Column(name = "name")
     private String name;
 }

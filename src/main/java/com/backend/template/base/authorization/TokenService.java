@@ -39,12 +39,13 @@ public class TokenService {
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("alg", "HS256")
-                .setSubject(user.getEmail()) // 토큰의 주체(subject)로 이메일 사용 (validateTokenAndGetEmail과 일관성 유지)
-                .claim("id", user.getId()) // 사용자 ID를 'id'라는 커스텀 클레임으로 추가
-                .claim("email", user.getEmail()) // 이메일을 'email'이라는 커스텀 클레임으로 추가
-                .setIssuedAt(now) // 발행 시간
-                .setExpiration(expiryDate) // 만료 시간
-                .signWith(secretKey, SignatureAlgorithm.HS256) // 서명
+                .setSubject(user.getEmail())
+                .claim("id", user.getId())
+                .claim("actor", user.getActor())
+                .claim("email", user.getEmail())
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 

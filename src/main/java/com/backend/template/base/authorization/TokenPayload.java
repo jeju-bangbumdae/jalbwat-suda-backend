@@ -7,5 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class TokenPayload {
     private String id;
+    private String actor;
     private String email;
 }
