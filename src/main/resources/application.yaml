@@ -1,15 +1,13 @@
 spring:
   datasource:
-    hikari:
-      driver-class-name: com.mysql.cj.jdbc.Driver # MySQL 드라이버로 변경
-      jdbc-url: jdbc:mysql://mysql-0.mysql.goormthon-3.svc.cluster.local:3306/jalbwat-suda?useSSL=false&allowPublicKeyRetrieval=true
-      username: myuser # MySQL 사용자 이름
-      password: mypass123 # MySQL 비밀번호
+    driver-class-name: com.mysql.cj.jdbc.Driver # MySQL 드라이버로 변경
+    url: jdbc:mysql://mysql-0.mysql.goormthon-3.svc.cluster.local:3306/jalbwat-suda?useSSL=false&allowPublicKeyRetrieval=true
+    username: myuser # MySQL 사용자 이름
+    password: mypass123 # MySQL 비밀번호
 
   jpa:
     hibernate:
       ddl-auto: update
-      # MySQL Dialect로 변경
       database-platform: org.hibernate.dialect.MySQL8Dialect # 또는 MySQL5Dialect 등 버전에 맞는 Dialect 사용
     # SQL 쿼리 로깅 여부
     show-sql: true
