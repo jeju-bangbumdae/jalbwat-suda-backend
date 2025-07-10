@@ -2,8 +2,11 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver # MySQL 드라이버로 변경
     url: jdbc:mysql://mysql-0.mysql.goormthon-3.svc.cluster.local:3306/jalbwat-suda?useSSL=false&allowPublicKeyRetrieval=true
+#    url: jdbc:mysql://localhost:3306/test?useSSL=false&allowPublicKeyRetrieval=true
     username: myuser # MySQL 사용자 이름
+#    username: root # MySQL 사용자 이름
     password: mypass123 # MySQL 비밀번호
+#    password: password # MySQL 비밀번호
 
   jpa:
     hibernate:
