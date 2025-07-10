@@ -16,10 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class StoreQueryService {
     private final JPAQueryFactory qf;
 
-    public Store findBy(Point point) {
-        QStore store = QStore.store;
-        QUser user = QUser.user;
-
-    }
+//    public Store findBy(Point point) {
+//        QStore store = QStore.store;
+//        QUser user = QUser.user;
+//
+//    }
 }
 
