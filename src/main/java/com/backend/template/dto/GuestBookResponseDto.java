@@ -16,5 +16,5 @@ public class GuestBookResponseDto {
     private String category;
     private List<QuestionResponseDto> questions;
     private String content;
-    private User user;
+    private UserResponseDto user;
 }
