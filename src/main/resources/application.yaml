@@ -10,7 +10,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     database-platform: org.hibernate.dialect.MySQL8Dialect # 또는 MySQL5Dialect 등 버전에 맞는 Dialect 사용
     # SQL 쿼리 로깅 여부
     show-sql: true
