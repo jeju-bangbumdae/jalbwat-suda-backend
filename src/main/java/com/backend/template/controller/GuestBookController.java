@@ -1,5 +1,7 @@
 package com.backend.template.controller;
 
+import com.backend.template.base.authorization.TokenService;
+import com.backend.template.dto.CreateGuestBookRequestDto;
 import com.backend.template.dto.QnaResponseDto;
 import com.backend.template.dto.UserResponseDto;
 import com.backend.template.entity.GuestBook;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +32,33 @@ import java.util.List;
 public class GuestBookController {
 
     private final GuestBookService guestBookService;
+    private final TokenService tokenService;
+
+    @PostMapping
+    @Operation(summary = "방명록 생성", description = "질문, 상점 ID, 내용, 답변을 기반으로 방명록을 생성합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "방명록 생성 성공",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청 데이터", content = @Content),
+            @ApiResponse(responseCode = "401", description = "인증 실패", content = @Content),
+            @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
+    })
+    public ResponseEntity<String> createGuestBook(
+            @RequestBody @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "방명록 생성 요청", required = true
+            ) CreateGuestBookRequestDto request,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String header
+    ) {
+        if (header == null || !header.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body("인증 토큰이 유효하지 않습니다.");
+        }
+        String token = header.substring(7);
+        Long userId = this.tokenService.validateTokenAndGetUserId(token);
+        guestBookService.create(userId, request); // 토큰 그대로 전달
+        return ResponseEntity.status(201).body("정상 저장 되었습니다.");
+    }
+
 
     @GetMapping("/by-store/{storeId}")
     @Operation(summary = "상점 ID로 방명록 목록 조회", description = "특정 상점의 방명록 목록을 최신순으로 조회합니다.")

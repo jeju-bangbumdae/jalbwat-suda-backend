@@ -49,20 +49,17 @@ public class TokenService {
                 .compact();
     }
 
-    /**
-     * JWT 토큰의 유효성을 검증하고 이메일을 추출합니다.
-     * 실제 사용 시에는 이메일 외에 권한 정보 등도 추출하여 사용합니다.
-     * @param token 검증할 JWT 토큰
-     * @return 토큰에서 추출된 이메일 (유효하지 않으면 null)
-     */
-    public String validateTokenAndGetEmail(String token) {
+    public Long validateTokenAndGetUserId(String token) {
         try {
+            byte[] keyBytes = Decoders.BASE64.decode(secretKeyString);
+            this.secretKey = Keys.hmacShaKeyFor(keyBytes);
+
             return Jwts.parserBuilder()
                     .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(token)
                     .getBody()
-                    .getSubject(); // subject 클레임에서 이메일 추출
+                    .get("id", Long.class);
         } catch (Exception e) {
             System.err.println("Invalid JWT Token: " + e.getMessage());
             return null;
