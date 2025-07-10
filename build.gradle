@@ -75,9 +75,6 @@ dependencies {
     //univcert
     implementation 'com.github.in-seo:univcert:master-SNAPSHOT'
 
-    //redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
     //ModelMapper
     implementation 'org.modelmapper:modelmapper:3.1.0'
 
