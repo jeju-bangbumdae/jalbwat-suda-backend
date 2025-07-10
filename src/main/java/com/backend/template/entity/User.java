@@ -13,13 +13,12 @@ public class User extends BaseEntity {
     private String email;
 
     @NotNull
-    @Column(name = "user_password")
+    @Column(name = "password")
     private String password;
 
     @NotNull
     private String actor;
 
     @NotNull
-    @Column(name = "name")
     private String name;
 }

@@ -1,25 +1,29 @@
 package com.backend.template.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import org.locationtech.jts.geom.Point;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Store extends BaseEntity {
-    @NotNull
-    @Column(name = "email", unique = true)
-    private String email;
 
-    @NotNull
-    @Column(name = "user_password")
-    private String password;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @NotNull
-    @Column(name = "name")
+    @Column(nullable = false, length = 100)
     private String name;
+
+    @Column(nullable = false, columnDefinition = "POINT")
+    private Point location;
+
+    @Column(nullable = false, length = 50)
+    private String category;
+
+    @Column(length = 255)
+    private String operationTime;
 }
