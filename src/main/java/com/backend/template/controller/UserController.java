@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController("api/v1")
 @RequiredArgsConstructor
-@Tag(name = "User API", description = "사용자 관련 API") // <-- 클래스 레벨에 태그 추가
+@Tag(name = "User API", description = "사용자 관련 API")
 public class UserController {
 
     private final UserService userService;
