@@ -1,5 +1,9 @@
 package com.backend.template.controller;
 
+import com.backend.template.dto.QnaResponseDto;
+import com.backend.template.dto.UserResponseDto;
+import com.backend.template.entity.GuestBook;
+import com.backend.template.service.GuestBookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -13,8 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.backend.template.dto.GuestBookResponseDto;
-import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -23,6 +27,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "GuestBook API", description = "방명록 관련 API")
 public class GuestBookController {
+
+    private final GuestBookService guestBookService;
 
     @GetMapping("/by-store/{storeId}")
     @Operation(summary = "상점 ID로 방명록 목록 조회", description = "특정 상점의 방명록 목록을 최신순으로 조회합니다.")
@@ -36,8 +42,13 @@ public class GuestBookController {
                     content = @Content(mediaType = "application/json"))
     })
     public ResponseEntity<List<GuestBookResponseDto>> getGuestBooksByStoreId(
-            @PathVariable @Parameter(description = "조회할 상점의 ID", example = "1") Long storeId) {
-        return ResponseEntity.ok(null);
+            @PathVariable @Parameter(description = "조회할 상점의 ID", example = "1") Integer storeId) {
+        List<GuestBook> guestBooks = this.guestBookService.getGuestBooksByStoreId(storeId);
+        List<GuestBookResponseDto> body = new ArrayList<>();
+        for (GuestBook guestBook : guestBooks) {
+            body.add(this.mapToDto(guestBook));
+        }
+        return ResponseEntity.ok(body);
     }
 
     @GetMapping()
@@ -50,7 +61,12 @@ public class GuestBookController {
                     content = @Content(mediaType = "application/json"))
     })
     public ResponseEntity<List<GuestBookResponseDto>> getLatestGuestBooks() {
-        return ResponseEntity.ok(null);
+        List<GuestBook> guestBooks = this.guestBookService.getLatestGuestBooks();
+        List<GuestBookResponseDto> body = new ArrayList<>();
+        for (GuestBook guestBook : guestBooks) {
+            body.add(this.mapToDto(guestBook));
+        }
+        return ResponseEntity.ok(body);
     }
 
     @GetMapping("/by-user/{userId}")
@@ -65,7 +81,37 @@ public class GuestBookController {
                     content = @Content(mediaType = "application/json"))
     })
     public ResponseEntity<List<GuestBookResponseDto>> getGuestBooksByUserId(
-            @PathVariable @Parameter(description = "조회할 사용자의 ID", example = "1") Long userId) {
-        return ResponseEntity.ok(null);
+            @PathVariable @Parameter(description = "조회할 사용자의 ID", example = "1") Integer userId) {
+        List<GuestBook> guestBooks = this.guestBookService.getGuestBooksByUserId(userId);
+        List<GuestBookResponseDto> body = new ArrayList<>();
+        for (GuestBook guestBook : guestBooks) {
+            body.add(this.mapToDto(guestBook));
+        }
+        return ResponseEntity.ok(body);
+    }
+
+    private GuestBookResponseDto mapToDto(GuestBook guestBook) {
+        QnaResponseDto qnaDto = QnaResponseDto.builder()
+                .question(guestBook.getQuestion().getQuestion())
+                .answer(guestBook.getAnswer())
+                .build();
+
+        UserResponseDto userDto = UserResponseDto.builder()
+                .id(guestBook.getUser().getId())
+                .name(guestBook.getUser().getName())
+                .actor(guestBook.getUser().getActor())
+                .email(guestBook.getUser().getEmail())
+                .build();
+
+        return GuestBookResponseDto.builder()
+                .id(guestBook.getId())
+                .storeId(guestBook.getStore().getId())
+                .storeName(guestBook.getStore().getName())
+                .storeAddress(guestBook.getStore().getAddress())
+                .storeCategory(guestBook.getStore().getCategory())
+                .qna(qnaDto)
+                .content(guestBook.getContent())
+                .user(userDto)
+                .build();
     }
 }

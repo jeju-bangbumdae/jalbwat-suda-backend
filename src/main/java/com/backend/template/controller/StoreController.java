@@ -11,13 +11,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.locationtech.jts.geom.Point;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController()
 @RequestMapping("/api/v1/stores")
@@ -62,6 +59,7 @@ public class StoreController {
     })
     public ResponseEntity<StoreResponseDto> getStoreById(
             @PathVariable @Parameter(description = "조회할 상점의 ID", example = "1") Long storeId) {
-        return ResponseEntity.ok(null);
+        StoreResponseDto body = this.storeService.findById(storeId);
+        return ResponseEntity.ok(body);
     }
 }

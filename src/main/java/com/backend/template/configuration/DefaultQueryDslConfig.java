@@ -2,21 +2,20 @@ package com.backend.template.configuration;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
-import org.springframework.beans.factory.annotation.Qualifier;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Properties;
 
 @Configuration
 @ConditionalOnClass({JPAQueryFactory.class})
 public class DefaultQueryDslConfig {
 
+    @PersistenceContext
+    private EntityManager em;
+
     @Bean
-    public JPAQueryFactory jpaQueryFactory(EntityManager em) {
+    public JPAQueryFactory jpaQueryFactory() {
         return new JPAQueryFactory(em);
     }
 }

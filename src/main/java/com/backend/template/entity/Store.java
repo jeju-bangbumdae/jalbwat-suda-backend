@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Type;
 import org.locationtech.jts.geom.Point;
 
 @Getter
@@ -21,12 +22,21 @@ public class Store extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String businessNum;
 
-    @Column(nullable = false, columnDefinition = "POINT")
-    private Point location;
+    @Column(nullable = false, length = 100)
+    private String address;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 100)
     private String category;
+
+    @Column(nullable = false)
+    private double latitude;
+
+    @Column(nullable = false)
+    private double longitude;
 
     @Column(length = 255)
     private String operationTime;
+
+    @Column(length = 255)
+    private String phone;
 }
