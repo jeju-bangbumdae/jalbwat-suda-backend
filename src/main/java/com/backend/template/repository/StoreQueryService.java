@@ -22,10 +22,7 @@ public class StoreQueryService {
         QStore store = QStore.store;
         QUser user = QUser.user;
 
-        NumberExpression<Double> distance = Expressions.numberTemplate(Double.class,
-                "(6371 * acos(cos(radians({0})) * cos(radians({1})) * cos(radians({2}) - radians({3})) + sin(radians({0})) * sin(radians({1}))))",
-                userLat, store.latitude, store.longitude, userLng
-        );
+        NumberExpression<Double> distance = calculateDistance(userLat, userLng, store.latitude, store.longitude);
 
         return qf.selectFrom(store)
                 .leftJoin(store.user, user).fetchJoin()
@@ -38,10 +35,8 @@ public class StoreQueryService {
         QStore store = QStore.store;
         QUser user = QUser.user;
 
-        NumberExpression<Double> distance = Expressions.numberTemplate(Double.class,
-                "(6371 * acos(cos(radians({0})) * cos(radians({1})) * cos(radians({2}) - radians({3})) + sin(radians({0})) * sin(radians({1}))))",
-                userLat, store.latitude, store.longitude, userLng
-        );
+        // 하버사인 공식을 사용한 거리 계산
+        NumberExpression<Double> distance = calculateDistance(userLat, userLng, store.latitude, store.longitude);
 
         return qf.selectFrom(store)
                 .where(store.category.eq(category))
@@ -49,5 +44,38 @@ public class StoreQueryService {
                 .orderBy(distance.asc())
                 .limit(15)
                 .fetch();
+    }
+
+    /**
+     * 하버사인 공식을 사용하여 두 지점 간의 거리를 계산합니다.
+     * @param userLat 사용자 위도
+     * @param userLng 사용자 경도
+     * @param storeLat 매장 위도 (Entity 필드)
+     * @param storeLng 매장 경도 (Entity 필드)
+     * @return 거리 (km)
+     */
+    private NumberExpression<Double> calculateDistance(double userLat, double userLng,
+                                                       NumberExpression<Double> storeLat,
+                                                       NumberExpression<Double> storeLng) {
+
+        double earthRadius = 6371.0;
+        NumberExpression<Double> latDiff = storeLat.subtract(userLat)
+                .multiply(Math.PI / 180.0);
+
+        NumberExpression<Double> lngDiff = storeLng.subtract(userLng)
+                .multiply(Math.PI / 180.0);
+        double userLatRad = userLat * Math.PI / 180.0;
+
+        NumberExpression<Double> storeLatRad = storeLat.multiply(Math.PI / 180.0);
+        NumberExpression<Double> a =
+                Expressions.numberTemplate(Double.class,
+                        "POWER(SIN({0} / 2), 2) + COS({1}) * COS({2}) * POWER(SIN({3} / 2), 2)",
+                        latDiff, userLatRad, storeLatRad, lngDiff);
+
+        NumberExpression<Double> c =
+                Expressions.numberTemplate(Double.class,
+                        "2 * ATAN2(SQRT({0}), SQRT(1 - {0}))", a);
+
+        return Expressions.numberTemplate(Double.class, "{0} * {1}", earthRadius, c);
     }
 }

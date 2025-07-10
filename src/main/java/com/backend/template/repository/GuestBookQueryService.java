@@ -45,7 +45,7 @@ public class GuestBookQueryService {
         QUser user = QUser.user;
 
         return qf.selectFrom(guestBook)
-//                .leftJoin(guestBook.store, store).fetchJoin()
+                .leftJoin(guestBook.store, store).fetchJoin()
                 .leftJoin(guestBook.user, user).fetchJoin()
                 .orderBy(guestBook.createdAt.desc())
                 .fetch();
